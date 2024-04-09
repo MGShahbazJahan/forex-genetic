@@ -12,7 +12,6 @@ def getdata(request):
     if(request.method=='POST'):
         print(request.POST.get('cex'))
         if request.POST.get('cex'):
-
             cex=request.POST.get('cex')
             # start_date = dt.datetime.today()- dt.timedelta(5) 
             # end_date = dt.datetime.today()
