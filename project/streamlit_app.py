@@ -1,9 +1,9 @@
 import streamlit as st
+import requests 
 
 
 def main():
-    st.title("Dashboard")
-    st.write("Aqui você pode adicionar suas visualizações do Streamlit.")
+    response = requests.get('http://127.0.0.1:8000')
 
 
 if __name__ == "__main__":
