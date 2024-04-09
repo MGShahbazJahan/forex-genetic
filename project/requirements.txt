@@ -6,3 +6,4 @@ matplotlib
 collection
 plotly
 django
+streamlit
