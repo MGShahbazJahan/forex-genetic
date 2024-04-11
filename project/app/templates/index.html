@@ -13,9 +13,16 @@
         {% csrf_token %}
         <div class="box">
             <label for="cex">currency exchange:</label>
-            <input type="text" name="cex" id="cex" value="USDJPY=X">
+            <select name="cex" id="cex">
+                <option value="USDJPY=X">USDJPY=X</option>
+                <option value="USDCAD=X">USDCAD=X</option>
+                <option value="EURJPY=X">EURJPY=x</option>
+                <option value="USDGBP=X">USDGBP=X</option>
+            </select>
+            <br>
         </div>
         <input class="button" type="submit" name="submit" value="Submit">
     </form>
 </body>
+
 </html>

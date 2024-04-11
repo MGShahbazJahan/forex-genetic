@@ -1,11 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
+
 <body>
-    this is chart
+
+  <div id="myPlot" style="width:100%;max-width:1000px;height: 700px;"></div>
+  <div id="rsiPlot" style="width:100%;max-width:1000px;height: 300px;"></div>
+  <div id="mfiPlot" style="width:100%;max-width:1000px;height: 300px;"></div>
+  <!-- <script>
+  
+  const jdata='{{json_data}}';
+  console.log(jdata);
+  // document.getElementById('myPlot').innerHTML= jdata.chart;
+</script> -->
+  <script>
+    var xyear = {{ json_data.xyear }};
+    var xmonth = {{ json_data.xmonth }};
+    var xday = {{ json_data.xday }};
+    var smayArray = {{json_data.ysma}};
+    var ewmayArray = {{json_data.yewma}};
+    var rsiyArray = {{json_data.yrsi}};
+    var priceyArray = {{json_data.yprice}};    
+    var bbandsloweryArray = {{json_data.ybbandslower}};
+    var bbandsupperyArray = {{json_data.ybbandsupper}};
+    var bbandsmiddleyArray = {{json_data.ybbandsmiddle}};
+    var mfiyArray = {{json_data.ymfi}};
+    var xArray=[];
+    for(let i=0;i<xyear.length;i++){
+      const d=new Date(xyear[i],xmonth[i],xday[i]);
+      xArray.push(d);
+    }
+    var trace6 = {
+      x: xArray,
+      y: priceyArray,
+      mode: 'lines',
+      name: 'PRICE'
+    };
+    var trace7 = {
+      x: xArray,
+      y: bbandsupperyArray,
+      mode: 'lines',
+      name: 'UpperBBANDS'
+    };
+    var trace8 = {
+      x: xArray,
+      y: bbandsloweryArray,
+      mode: 'lines',
+      name: 'LowerBBANDS'
+    };
+    var trace9 = {
+      x: xArray,
+      y: bbandsmiddleyArray,
+      mode: 'lines',
+      name: 'MiddleBBANDS'
+    };
+    var trace1 = {
+      x: xArray,
+      y: ewmayArray,
+      mode: 'lines',
+      name: 'EWMA'
+    };
+
+    var trace2 = {
+      x: xArray,
+      y: smayArray,
+      mode: 'lines',
+      name: 'SMA'
+    };
+
+    var trace3 = {
+      x: xArray,
+      y: rsiyArray,
+      mode: 'lines',
+      name: 'RSI'
+    };
+
+    // var trace4 = {
+    //   x: xArray,
+    //   y: bbandsyArray,
+    //   mode: 'lines',
+    //   name: 'BBANDS'
+    // };
+
+    var trace5 = {
+      x: xArray,
+      y: mfiyArray,
+      mode: 'lines',
+      name: 'MFI'
+    };
+
+    var data = [trace1, trace2, trace6, trace7, trace8,trace9];
+
+    var layout = {
+      xaxis: { title: "TImeline"},
+      yaxis: { title: "{{json_data.cex}}"},  
+      title: 'Adding Names to Line and Scatter Plot'
+    };
+
+    Plotly.newPlot('myPlot', data, layout);
+    Plotly.newPlot('rsiPlot', [trace3], layout);
+    Plotly.newPlot('mfiPlot', [trace5], layout);
+
+    
+    // const smayArray = {{json_data.ysma}};
+    // const ewmayArray = {{json_data.yewma}};
+    // const smadata = [{
+    //   x: xArray,
+    //   y: smayArray,
+    //   mode:"lines"
+    // }];
+    // const ewmadata = [{
+    //   x: xArray,
+    //   y: ewmayArray,
+    //   mode:"lines"
+    // }];
+    // data=[smadata,ewmadata]
+    // const layout = {
+    //   // xaxis: { title: "TImeline"},
+    //   // yaxis: {title: "{{json_data.cex}}"},  
+    //   title: "ML Models vs Time"
+    // };
+    // Plotly.newPlot("myPlot", data, layout);
+    // // Plotly.("myPlot", ewmadata, layout);
+  </script>
+
 </body>
+
 </html>

@@ -1,53 +1,107 @@
 import pandas as pd
 import yfinance as yf
+import datetime as dt
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 
 
-def MA(cex):
+def indicators(cex):
+    def downloaddata(cex):
+        start_date = dt.datetime.today()- dt.timedelta(1000) 
+        end_date = dt.datetime.today()
+        data = yf.download(cex, start_date, end_date)[::-1]
+        return data
+
+    # Calculate money flow index
+    def MFI(data, n=14):
+        high=data['High']
+        low=data['Low']
+        close=data['Close']
+        tr = np.amax(np.vstack(((high - low).to_numpy(), (abs(high - close)).to_numpy(), (abs(low - close)).to_numpy())).T, axis=1)
+        return pd.Series(tr).rolling(n).mean().to_numpy()
+
+
+    def RSI(data, periods = 14):
+        close=data['Close']
+        close_delta = close.diff()
+
+        # Make two series: one for lower closes and one for higher closes
+        up = close_delta.clip(lower=0)
+        down = -1 * close_delta.clip(upper=0)
+        
+        ma_up = up.ewm(com = periods - 1, adjust=True, min_periods = periods).mean()
+        ma_down = down.ewm(com = periods - 1, adjust=True, min_periods = periods).mean()
+
+        rsi = ma_up / ma_down
+        rsi = 100 - (100/(1 + rsi))
+        return rsi
+
+
+    # Compute the Bollinger Bands 
+    def BBANDS(data, ndays=20):
+        MA = data['Close'].rolling(window=ndays).mean()
+        SD = data['Close'].rolling(window=ndays).std()
+        bbands=dict()
+        bbands['MiddleBand'] = MA
+        bbands['UpperBand'] = MA + (2 * SD) 
+        bbands['LowerBand'] = MA - (2 * SD)
+        return bbands
+
+
+    # Simple Moving Average 
+    def SMA(data, ndays=20): 
+        # Compute the 50-day SMA        
+        SMA = pd.Series(data['Close'].ewm(span = ndays, min_periods = ndays - 1).mean(), 
+                    name = 'SMA_' + str(ndays)) 
+        SMA = data.join(SMA) 
+        SMA = SMA.dropna()
+        SMA = SMA['SMA_'+ str(ndays)]
+        return SMA
+
     # Exponentially-weighted Moving Average 
-    def EWMA(data, ndays): 
+    def EMA(data, ndays=200): 
+        # Compute the 200-day EWMA
+        
         EMA = pd.Series(data['Close'].ewm(span = ndays, min_periods = ndays - 1).mean(), 
                     name = 'EWMA_' + str(ndays)) 
-        data = data.join(EMA) 
-        return data
-    # Simple Moving Average 
-    def SMA(data, ndays): 
-        SMA = pd.Series(data['Close'].rolling(ndays).mean(), name = 'SMA') 
-        data = data.join(SMA) 
-        return data
-    # Retrieve the data from Yahoo finance
-    print("ma")
-    data = yf.download(cex, start="2020-01-01", end="2022-04-30")
-    close = data['Close']
+        EMA = data.join(EMA) 
+        EMA = EMA.dropna()
+        EMA = EMA['EWMA_' + str(ndays)]
+        return EMA
+    
 
-    # Compute the 50-day SMA
-    n = 50
-    SMA = SMA(data,n)
-    SMA = SMA.dropna()
-    SMA = SMA['SMA']
-
-    # Compute the 200-day EWMA
-    ew = 200
-    EWMA = EWMA(data,ew)
-    EWMA = EWMA.dropna()
-    EWMA = EWMA['EWMA_200']
-    return SMA
-    # Plotting the Google stock Price Series chart and Moving Averages below
-    # plt.figure(figsize=(10,7))
-
-    # # Set the title and axis labels
-    # plt.title('Moving Average')
-    # plt.xlabel('Date')
-    # plt.ylabel('Price')
-
-    # # Plot close price and moving averages
-    # plt.plot(data['Close'],lw=1, label='Close Price')
-    # plt.plot(SMA,'g',lw=1, label='50-day SMA')
-    # plt.plot(EWMA,'r', lw=1, label='200-day EMA')
-
-    # # Add a legend to the axis
-    # plt.legend()
-
-    # plt.show()
+    data=downloaddata(cex)
+    print(len(data))
+    rsi=RSI(data)
+    mfi=MFI(data)
+    bbands=BBANDS(data)
+    sma=SMA(data)
+    ewma=EMA(data)
+    close=data['Close']
+    smallest_length_data=len(ewma)
+    rsi=rsi[len(rsi)-len(ewma):]
+    mfi=mfi[len(mfi)-len(ewma):]
+    bbands['MiddleBand']=bbands['MiddleBand'][len(bbands['MiddleBand'])-len(ewma):]
+    bbands['LowerBand']=bbands['LowerBand'][len(bbands['LowerBand'])-len(ewma):]
+    bbands['UpperBand']=bbands['UpperBand'][len(bbands['UpperBand'])-len(ewma):]
+    # print(bbands['UpperBand'])
+    sma=sma[len(sma)-len(ewma):]
+    print("RSI")
+    print(len(rsi))
+    # print(rsi)
+    print("MFI")
+    print(len(mfi))
+    # print(mfi)
+    print("BBANDS")
+    print(len(bbands['MiddleBand']))
+    print(len(bbands['LowerBand']))
+    print(len(bbands['UpperBand']))
+    # print(bbands)
+    print("MA")
+    print(len(sma))
+    # print(sma)
+    print(len(ewma))
+    # print(ewma)
+    return [close,sma,ewma,rsi,bbands['LowerBand'],bbands['MiddleBand'],bbands['UpperBand'],mfi]
