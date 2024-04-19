@@ -68,10 +68,10 @@ def MA(data,n=50):
     EWMA = EWMA['EWMA_200']
     return SMA,EWMA
 
-start_date = dt.datetime.today()- dt.timedelta(3000) 
+start_date = dt.datetime.today()- dt.timedelta(1100) 
 end_date = dt.datetime.today()
 stock ="USDJPY=X"
-data = yf.download(stock, start_date, end_date)[::-1]
+data = yf.download(stock, start_date, end_date)
 print(len(data))
 rsi=RSI(data)
 mfi=MFI(data)

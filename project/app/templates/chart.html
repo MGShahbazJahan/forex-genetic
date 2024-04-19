@@ -5,130 +5,316 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script>
+    function myFunction() {
+      // document.getElementById("p2").style.color = "blue";
+      var signal = {{ json_data.buysellsignallatest }};
+      var width = (50 * signal) + 50;
+      document.getElementById("myBar").style.width = width + "%";
+    }
+  </script>
+  <style>
+    .button-40 {
+      background-color: #111827;
+      border: 1px solid transparent;
+      border-radius: .75rem;
+      box-sizing: border-box;
+      color: #FFFFFF;
+      cursor: pointer;
+      flex: 0 0 auto;
+      font-family: "Inter var", ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1.125rem;
+      font-weight: 600;
+      line-height: 1.5rem;
+      padding: .75rem 1.2rem;
+      text-align: center;
+      text-decoration: none #6B7280 solid;
+      text-decoration-thickness: auto;
+      transition-duration: .2s;
+      transition-property: background-color, border-color, color, fill, stroke;
+      transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      width: auto;
+    }
+
+    .button-40:hover {
+      background-color: #374151;
+    }
+
+    .button-40:focus {
+      box-shadow: none;
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
+
+    @media (min-width: 768px) {
+      .button-40 {
+        padding: .75rem 1.5rem;
+      }
+    }
+  </style>
 </head>
 
-<body>
+<body onload="myFunction()">
+  <div style="text-align: center;color: #ffffff;background-color: #0F1111;">
+    <h1>Forex Prediction</h1>
+  </div>
+  <div style="width: fit-content; margin: auto; padding: auto; text-align: center;">
+    <form action="getdata" method="post" style=" padding: 30px;text-align: center;width: 100%;">
+      {% csrf_token %}
+      <div class="box">
+        <label for="cex" style="margin:20px;">Select the Currency Exchange:</label>
+        <select name="cex" id="cex" style="margin:auto;">
+          <option value="USDINR=X">USDINR</option>
+          <option value="USDAUD=X">USDAUD</option>
+          <option value="USDNZD=X">USDNZD</option>
+          <option value="USDCAD=X">USDCAD</option>
+          <option value="USDJPY=X">USDJPY</option>
+          <option value="EURJPY=X">EURJPY</option>
+          <option value="EURGBP=X">EURGBP</option>
+          <option value="EURNZD=X">EURNZD</option>
+          <option value="INRJPY=X">INRJPY</option>
+          <option value="CHFUSD=X">CHFUSD</option>
+          <option value="CADJPY=X">CADJPY</option>
+          <option value="GBPJPY=X">GBPJPY</option>
+          <option value="CHFEUR=X">CHFEUR</option>
+          <option value="CHFJPY=X">CHFJPY</option>
+          <option value="NZDJPY=X">NZDJPY</option>
+          <!-- <option value="EURINR=X">EURINR</option> -->
+          <!-- <option value="EURAUD=X">EURAUD</option> -->
+          <!-- <option value="USDEUR=X">USDEUR</option> -->
+          <!-- <option value="AUDINR=X">AUDINR</option> -->
+          <!-- <option value="AUDJPY=X">AUDJPY</option> -->
+          <!-- <option value="USDGBP=X">USDGBP</option> -->
+          <!-- <option value="EURCAD=X">EURCAD</option> -->
+          <!-- <option value="GBPINR=X">GBPINR</option> -->
+          <!-- <option value="AUDGBP=X">AUDGBP</option> -->
+          <!-- <option value="GBPCAD=X">GBPCAD</option> -->
+        </select>
+        <br>
+      </div>
+      <input class="button-40" type="submit" role="button" name="submit" value="Submit">
+    </form>
+  </div>
+  <div style="text-align: center;color: #ffffff;background-color: #0F1111;">
+    <h1>{{json_data.cexnice}}</h1>
+  </div>
+  <div style="text-align: center; margin-left: 20%;margin-right: 20%; margin-top: 2%;margin-bottom: 2%;padding: auto;">
+    <div style="width: 1000px; text-align: center; background-color: red; height: 20px;">
+      <div id="myBar" class="w3-container w3-green w3-center" style="width:50px; text-align: center;height: 20px;">
+      </div>
+    </div>
+  </div>
 
-  <div id="myPlot" style="width:100%;max-width:1000px;height: 700px;"></div>
-  <div id="rsiPlot" style="width:100%;max-width:1000px;height: 300px;"></div>
-  <div id="mfiPlot" style="width:100%;max-width:1000px;height: 300px;"></div>
-  <!-- <script>
+  <div> buy sell Indicator : {{ json_data.buysellsignallatest }}</div>
+
+  <div> strong buy:0.5+ buy:>0 hold:=0 sell:<0 strong sell :0.5- </div>
+      <div id="myPlot" style="width:100%;max-width:1000px;height: 700px;"></div>
+      <div id="rsiPlot" style="width:100%;max-width:1000px;height: 300px;"></div>
+      <div id="mfiPlot" style="width:100%;max-width:1000px;height: 300px;"></div>
+      <div style="display: flex;">
+        <div id="trainingresult" style="width:100%;max-width:1000px;height: 700px;"></div>
+      </div>
+      <div id="performancePlot" style="width:100%;max-width:1000px;height: 700px;"></div>
+      <!-- <script>
   
   const jdata='{{json_data}}';
   console.log(jdata);
   // document.getElementById('myPlot').innerHTML= jdata.chart;
 </script> -->
-  <script>
-    var xyear = {{ json_data.xyear }};
-    var xmonth = {{ json_data.xmonth }};
-    var xday = {{ json_data.xday }};
-    var smayArray = {{json_data.ysma}};
-    var ewmayArray = {{json_data.yewma}};
-    var rsiyArray = {{json_data.yrsi}};
-    var priceyArray = {{json_data.yprice}};    
-    var bbandsloweryArray = {{json_data.ybbandslower}};
-    var bbandsupperyArray = {{json_data.ybbandsupper}};
-    var bbandsmiddleyArray = {{json_data.ybbandsmiddle}};
-    var mfiyArray = {{json_data.ymfi}};
-    var xArray=[];
-    for(let i=0;i<xyear.length;i++){
-      const d=new Date(xyear[i],xmonth[i],xday[i]);
-      xArray.push(d);
-    }
-    var trace6 = {
-      x: xArray,
-      y: priceyArray,
-      mode: 'lines',
-      name: 'PRICE'
-    };
-    var trace7 = {
-      x: xArray,
-      y: bbandsupperyArray,
-      mode: 'lines',
-      name: 'UpperBBANDS'
-    };
-    var trace8 = {
-      x: xArray,
-      y: bbandsloweryArray,
-      mode: 'lines',
-      name: 'LowerBBANDS'
-    };
-    var trace9 = {
-      x: xArray,
-      y: bbandsmiddleyArray,
-      mode: 'lines',
-      name: 'MiddleBBANDS'
-    };
-    var trace1 = {
-      x: xArray,
-      y: ewmayArray,
-      mode: 'lines',
-      name: 'EWMA'
-    };
+      <script>
+        var xyear = {{ json_data.xyear }};
+        var xmonth = {{ json_data.xmonth }};
+        var xday = {{ json_data.xday }};
+        var smayArray = {{ json_data.ysma }};
+        var ewmayArray = {{ json_data.yewma }};
+        var rsiyArray = {{ json_data.yrsi }};
+        var priceyArray = {{ json_data.yprice }};
+        var bbandsloweryArray = {{ json_data.ybbandslower }};
+        var bbandsupperyArray = {{ json_data.ybbandsupper }};
+        var mfiyArray = {{ json_data.ymfi }};
+        var portfolioValueArray = {{ json_data.yportfoliovalue }};
+        var trainingresultArray = {{ json_data.trainingresult }};
+        var traininggenerationArray = {{ json_data.traininggeneration }};
 
-    var trace2 = {
-      x: xArray,
-      y: smayArray,
-      mode: 'lines',
-      name: 'SMA'
-    };
+        var xArray = [];
+        for (let i = 0; i < xyear.length; i++) {
+          const d = new Date(xyear[i], xmonth[i], xday[i]);
+          xArray.push(d);
+        }
+        var trace6 = {
+          x: xArray,
+          y: priceyArray,
+          mode: 'lines',
+          name: 'PRICE',
+          line: {
+            color: 'Green'
+          }
+        };
+        var trace7 = {
+          x: xArray,
+          y: bbandsupperyArray,
+          mode: 'lines',
+          name: 'UpperBBANDS',
+          line: {
+            color: '#dbdbdb'
+          }
+        };
+        var trace8 = {
+          x: xArray,
+          y: bbandsloweryArray,
+          mode: 'lines',
+          name: 'LowerBBANDS',
+          line: {
+            color: '#dbdbdb'
+          }
+        };
+        var trace9 = {
+          x: traininggenerationArray,
+          y: trainingresultArray,
+          mode: 'lines',
+          name: 'training results',
+          line: {
+            color: 'gray'
+          }
+        };
 
-    var trace3 = {
-      x: xArray,
-      y: rsiyArray,
-      mode: 'lines',
-      name: 'RSI'
-    };
+        var trace1 = {
+          x: xArray,
+          y: ewmayArray,
+          mode: 'lines',
+          name: 'EWMA'
+        };
 
-    // var trace4 = {
-    //   x: xArray,
-    //   y: bbandsyArray,
-    //   mode: 'lines',
-    //   name: 'BBANDS'
-    // };
+        var trace2 = {
+          x: xArray,
+          y: smayArray,
+          mode: 'lines',
+          name: 'SMA',
+          line: {
+            color: 'Red'
+          }
+        };
 
-    var trace5 = {
-      x: xArray,
-      y: mfiyArray,
-      mode: 'lines',
-      name: 'MFI'
-    };
+        var trace3 = {
+          x: xArray,
+          y: rsiyArray,
+          mode: 'lines',
+          name: 'RSI'
+        };
 
-    var data = [trace1, trace2, trace6, trace7, trace8,trace9];
+        var trace4 = {
+          x: xArray,
+          y: portfolioValueArray,
+          mode: 'lines',
+          name: 'currentvalue'
+        };
 
-    var layout = {
-      xaxis: { title: "TImeline"},
-      yaxis: { title: "{{json_data.cex}}"},  
-      title: 'Adding Names to Line and Scatter Plot'
-    };
+        var trace5 = {
+          x: xArray,
+          y: mfiyArray,
+          mode: 'lines',
+          name: 'MFI'
+        };
 
-    Plotly.newPlot('myPlot', data, layout);
-    Plotly.newPlot('rsiPlot', [trace3], layout);
-    Plotly.newPlot('mfiPlot', [trace5], layout);
+        var data = [trace1, trace2, trace6, trace7, trace8];
 
-    
-    // const smayArray = {{json_data.ysma}};
-    // const ewmayArray = {{json_data.yewma}};
-    // const smadata = [{
-    //   x: xArray,
-    //   y: smayArray,
-    //   mode:"lines"
-    // }];
-    // const ewmadata = [{
-    //   x: xArray,
-    //   y: ewmayArray,
-    //   mode:"lines"
-    // }];
-    // data=[smadata,ewmadata]
-    // const layout = {
-    //   // xaxis: { title: "TImeline"},
-    //   // yaxis: {title: "{{json_data.cex}}"},  
-    //   title: "ML Models vs Time"
-    // };
-    // Plotly.newPlot("myPlot", data, layout);
-    // // Plotly.("myPlot", ewmadata, layout);
-  </script>
+        var layout = {
+          yaxis: { title: "<b>{{json_data.cexnice}}</b>" ,
+          font: {
+              size: 24,
+            },},
+          title:{text: "<b>Technical Indicators for {{json_data.cexnice}}</b>",
+          font: {
+              size: 24,
+            },}
+        };
+        var layout1 = {
+          xaxis: { title: "<b>No of Generations</b>" ,font: {
+              size: 24,
+            },},
+          yaxis: { title: "<b>Profit by Best Player</b>",font: {
+              size: 24,
+            }, },
+          title: {text : "<b>Training results of the Best Player<b>",
+            font: {
+              size: 24,
+            },}
+        };
+        var layout2 = {
+          xaxis: { title: "<b>Timeline</b>" ,font: {
+              size: 24,
+            },},
+          yaxis: { title: "<b>Profit by Best Player</b>",font: {
+              size: 24,
+            }, },
+          title: {
+            text: "<b>Model performance for the {{json_data.cexnice}}</b>",
+            font: {
+              size: 24,
+            },
+          }
+        };
+        var layout3 = {
+          yaxis: { title: "<b>RSI of {{json_data.cexnice}}</b>" ,
+          font: {
+              size: 24,
+            }, },
+        };
+        var layout4 = {
+          xaxis: { title: "<b>Timeline</b>",
+          font: {
+              size: 24,
+            }, },
+          yaxis: { title: "<b>MFI of {{json_data.cexnice}}</b>" ,
+          font: {
+              size: 24,
+            },},
+        };
+
+        Plotly.newPlot('myPlot', data, layout);
+        Plotly.newPlot('rsiPlot', [trace3], layout3);
+        Plotly.newPlot('mfiPlot', [trace5], layout4);
+        Plotly.newPlot('performancePlot', [trace4], layout2);
+        Plotly.newPlot('trainingresult', [trace9], layout1);
+
+
+        // const smayArray = {{json_data.ysma}};
+        // const ewmayArray = {{json_data.yewma}};
+        // const smadata = [{
+        //   x: xArray,
+        //   y: smayArray,
+        //   mode:"lines"
+        // }];
+        // const ewmadata = [{
+        //   x: xArray,
+        //   y: ewmayArray,
+        //   mode:"lines"
+        // }];
+        // data=[smadata,ewmadata]
+        // const layout = {
+        //   // xaxis: { title: "TImeline"},
+        //   // yaxis: {title: "{{json_data.cex}}"},
+        //   title: "ML Models vs Time"
+        // };
+        // Plotly.newPlot("myPlot", data, layout);
+        // // Plotly.("myPlot", ewmadata, layout);
+      </script>
 
 </body>
 

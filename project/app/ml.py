@@ -9,9 +9,9 @@ import numpy as np
 
 def indicators(cex):
     def downloaddata(cex):
-        start_date = dt.datetime.today()- dt.timedelta(1000) 
+        start_date = dt.datetime.today()- dt.timedelta(1100) 
         end_date = dt.datetime.today()
-        data = yf.download(cex, start_date, end_date)[::-1]
+        data = yf.download(cex, start_date, end_date)
         return data
 
     # Calculate money flow index
@@ -79,7 +79,7 @@ def indicators(cex):
     bbands=BBANDS(data)
     sma=SMA(data)
     ewma=EMA(data)
-    close=data['Close']
+    # close=data['Close']
     smallest_length_data=len(ewma)
     rsi=rsi[len(rsi)-len(ewma):]
     mfi=mfi[len(mfi)-len(ewma):]
@@ -104,4 +104,4 @@ def indicators(cex):
     # print(sma)
     print(len(ewma))
     # print(ewma)
-    return [close,sma,ewma,rsi,bbands['LowerBand'],bbands['MiddleBand'],bbands['UpperBand'],mfi]
+    return [bbands['MiddleBand'],sma,ewma,rsi,bbands['LowerBand'],bbands['UpperBand'],mfi]

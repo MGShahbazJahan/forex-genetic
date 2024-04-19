@@ -5,24 +5,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        .button-40 {
+            background-color: #111827;
+            border: 1px solid transparent;
+            border-radius: .75rem;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            flex: 0 0 auto;
+            font-family: "Inter var", ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-size: 1.125rem;
+            font-weight: 600;
+            line-height: 1.5rem;
+            padding: .75rem 1.2rem;
+            text-align: center;
+            text-decoration: none #6B7280 solid;
+            text-decoration-thickness: auto;
+            transition-duration: .2s;
+            transition-property: background-color, border-color, color, fill, stroke;
+            transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: auto;
+        }
+
+        .button-40:hover {
+            background-color: #374151;
+        }
+
+        .button-40:focus {
+            box-shadow: none;
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
+
+        @media (min-width: 768px) {
+            .button-40 {
+                padding: .75rem 1.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <h1>wrking</h1>
-    <form action="getdata" method="post">
-        {% csrf_token %}
-        <div class="box">
-            <label for="cex">currency exchange:</label>
-            <select name="cex" id="cex">
-                <option value="USDJPY=X">USDJPY=X</option>
-                <option value="USDCAD=X">USDCAD=X</option>
-                <option value="EURJPY=X">EURJPY=x</option>
-                <option value="USDGBP=X">USDGBP=X</option>
-            </select>
-            <br>
-        </div>
-        <input class="button" type="submit" name="submit" value="Submit">
-    </form>
+    <div style="text-align: center;color: #ffffff;background-color: #0F1111;">
+        <h1>Forex Prediction</h1>
+    </div>
+    <div style="width: fit-content; margin: auto; padding: auto; ">
+        <form action="getdata" method="post" style=" padding: 30px;text-align: center;width: 100%;">
+            {% csrf_token %}
+            <div class="box">
+                <label for="cex" style="margin:20px;">Select the Currency Exchange:</label>
+                <select name="cex" id="cex" style="margin:auto;">
+                    <option value="USDINR=X">USDINR</option>
+                    <option value="USDAUD=X">USDAUD</option>
+                    <option value="USDNZD=X">USDNZD</option>
+                    <option value="USDCAD=X">USDCAD</option>
+                    <option value="USDJPY=X">USDJPY</option>
+                    <option value="EURJPY=X">EURJPY</option>
+                    <option value="EURGBP=X">EURGBP</option>
+                    <option value="EURNZD=X">EURNZD</option>
+                    <option value="INRJPY=X">INRJPY</option>
+                    <option value="CHFUSD=X">CHFUSD</option>
+                    <option value="CADJPY=X">CADJPY</option>
+                    <option value="GBPJPY=X">GBPJPY</option>
+                    <option value="CHFEUR=X">CHFEUR</option>
+                    <option value="CHFJPY=X">CHFJPY</option>
+                    <option value="NZDJPY=X">NZDJPY</option>
+                    <!-- <option value="EURINR=X">EURINR</option> -->
+                    <!-- <option value="EURAUD=X">EURAUD</option> -->
+                    <!-- <option value="USDEUR=X">USDEUR</option> -->
+                    <!-- <option value="AUDINR=X">AUDINR</option> -->
+                    <!-- <option value="AUDJPY=X">AUDJPY</option> -->
+                    <!-- <option value="USDGBP=X">USDGBP</option> -->
+                    <!-- <option value="EURCAD=X">EURCAD</option> -->
+                    <!-- <option value="GBPINR=X">GBPINR</option> -->
+                    <!-- <option value="AUDGBP=X">AUDGBP</option> -->
+                    <!-- <option value="GBPCAD=X">GBPCAD</option> -->
+                </select>
+                <br>
+            </div>
+            <!-- HTML !-->
+
+
+            <input class="button-40" type="submit" role="button" name="submit" value="Submit">
+        </form>
+    </div>
 </body>
 
 </html>

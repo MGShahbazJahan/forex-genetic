@@ -2,11 +2,9 @@ import yfinance as yf
 import datetime as dt
 import random
 from collections import defaultdict 
-
 from project.app.indicator import MFI, RSI, MA, BBANDS
 
-def generation(rsi,mfi,bbands,sma,ewma,learning_rate):
-    def fetch_weights():
+def fetch_weights():
         file = open("weights.txt", "r")
         lst=file.readlines()
         dictionary=defaultdict()
@@ -20,6 +18,8 @@ def generation(rsi,mfi,bbands,sma,ewma,learning_rate):
         dictionary["starting_capital"]=1000
         file.close
         return dictionary
+
+def generation(rsi,mfi,bbands,sma,ewma,learning_rate):    
     def populate(weights):
         num_of_players=20
         population=[weights]
@@ -56,25 +56,25 @@ def generation(rsi,mfi,bbands,sma,ewma,learning_rate):
             for j in range(len(rsi)):
                 buy_sell_signal=rsi[j]*weights_of_individual["rsi_parameter"]
                 buy_sell_signal+=mfi[j]*weights_of_individual["mfi_parameter"]
-                buy_sell_signal+=(sma[j]-ewma[j]/ewma[j])*weights_of_individual["ma_parameter"]
-                buy_sell_signal+=((bbands["MiddleBand"][j]-bbands["Close"][j])/(bbands["UpperBand"][j]-bbands["LowerBand"][j]))*weights_of_individual["bbands_parameter"]
+                buy_sell_signal+=(ewma[j]-sma[j]/ewma[j])*weights_of_individual["ma_parameter"]
+                buy_sell_signal+=((bbands["MiddleBand"].iloc[j]-bbands["Close"].iloc[j])/(bbands["UpperBand"].iloc[j]-bbands["LowerBand"].iloc[j]))*weights_of_individual["bbands_parameter"]
                 if(buy_sell_signal>abs(weights_of_individual["trade_threshold"])):
                     if(individual_portfolio["remaining_capital"]>=(individual_portfolio["starting_capital"]*weights_of_individual["capital_percentage"])):
-                        trade_units=(individual_portfolio["starting_capital"]*weights_of_individual["capital_percentage"]*buy_sell_signal)//(bbands["Close"][j])
-                        individual_portfolio["remaining_capital"]-=trade_units*bbands["Close"][j]
+                        trade_units=(individual_portfolio["starting_capital"]*weights_of_individual["capital_percentage"]*buy_sell_signal)//(bbands["Close"].iloc[j])
+                        individual_portfolio["remaining_capital"]-=trade_units*bbands["Close"].iloc[j]
                         individual_portfolio["number_of_stock"]+=trade_units
                 if(buy_sell_signal<abs(weights_of_individual["trade_threshold"])*(-1)):
                     if(individual_portfolio["number_of_stock"]>0):
-                        trade_units=(individual_portfolio["starting_capital"]*weights_of_individual["capital_percentage"]*buy_sell_signal)//(bbands["Close"][j])
+                        trade_units=(individual_portfolio["starting_capital"]*weights_of_individual["capital_percentage"]*abs(buy_sell_signal))//(bbands["Close"].iloc[j])
                         if(individual_portfolio["number_of_stock"]>=trade_units):
                             individual_portfolio["number_of_stock"]-=trade_units
-                            individual_portfolio["remaining_capital"]+=trade_units*bbands["Close"][j]
+                            individual_portfolio["remaining_capital"]+=trade_units*bbands["Close"].iloc[j]
                         else:
-                            individual_portfolio["remaining_capital"]+=individual_portfolio["number_of_stock"]*bbands["Close"][j]
+                            individual_portfolio["remaining_capital"]+=individual_portfolio["number_of_stock"]*bbands["Close"].iloc[j]
                             individual_portfolio["number_of_stock"]=0
-            final_result_of_individual=individual_portfolio["remaining_capital"]+individual_portfolio["number_of_stock"]*bbands["Close"][-1]
+            final_result_of_individual=(((individual_portfolio["remaining_capital"]+individual_portfolio["number_of_stock"]*bbands["Close"].iloc[-1])-1000)/200)+1000
             result_of_game.append(final_result_of_individual)
-        return result_of_game                       
+        return result_of_game
     
     def find_best(list_of_population,result_of_game):
         maximum=max(result_of_game)
@@ -94,8 +94,11 @@ def generation(rsi,mfi,bbands,sma,ewma,learning_rate):
     result_of_game=play_game(list_of_population,rsi,mfi,bbands,sma,ewma)
     new_weights=find_best(list_of_population,result_of_game)
     update_weights(new_weights)
+    # file = open("logs.txt","a")
     print("result=",max(result_of_game),new_weights["rsi_parameter"],new_weights["mfi_parameter"],new_weights["ma_parameter"],new_weights["bbands_parameter"],new_weights["capital_percentage"],new_weights["trade_threshold"],"lr=",learning_rate)
-
+    # l=["\n ",str(i)," thgen"," result= ",str(max(result_of_game))," ",str(new_weights["rsi_parameter"])," ",str(new_weights["mfi_parameter"])," ",str(new_weights["ma_parameter"])," ",str(new_weights["bbands_parameter"])," ",str(new_weights["capital_percentage"])," ",str(new_weights["trade_threshold"])]
+    # file.writelines(l)
+    # file.close()
 # the below commented code can restart the training of the genetic algorithm
 # file = open("weights.txt","w")
 # l=["0\n","0\n","0\n","0\n","0\n","0\n"]
@@ -103,7 +106,7 @@ def generation(rsi,mfi,bbands,sma,ewma,learning_rate):
 # file.close()
 start_date = dt.datetime.today()- dt.timedelta(3000) 
 end_date = dt.datetime.today()
-stock ="USDJPY=X"
+stock ="USDINR=X"
 data = yf.download(stock, start_date, end_date)
 learning_rate=1
 # print(data["Open"].iloc[0])
@@ -137,7 +140,7 @@ print(len(bbands))
 print("MA")
 print(len(sma))
 print(len(ewma))
-for i in range(1000):
+for i in range(5000):
     print(i,end=" ")
     generation(rsi,mfi,bbands,sma,ewma,learning_rate)
     learning_rate=learning_rate*1
