@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<style>
+    td {
+        padding: 5rem;
+        margin: 1.5rem;
+        font-size: large;
+    }
+</style>
+{% endblock head %}
+
+
+{% block body %}
+<!-- <a href="/getdatacurrencychart">prevous</a>
+<a href="/getdataperformance">next</a> -->
+<h1>buy sell chart</h1>
+<div>
+    <div style="display: flex; justify-content: center;align-items: center;width: 86vw;">
+        <img src="{% static 'bar.svg' %}" style="width: 40vw;display: block;" alt="bar">
+        <img src="{% static 'pointer.svg' %}"
+            style="position: relative; width: 2.5rem; height: 2.5rem;left: {{ offset}};" alt="pointer">
+
+    </div>
+    <div style="display: flex; justify-content: center;align-items: center;width: 86vw;">
+        <table style="margin-top: 3rem;">
+            
+            <tbody>
+                <tr>
+                    <td>-381</td>
+                    <td>1234</td>
+                </tr>
+                <tr>
+                    <td>o8273</td>
+                    <td>8164</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock body %}
+{% block previous %}/getdatacurrencychart{% endblock previous %}
+
+{% block next %}/getdataperformance{% endblock next %}

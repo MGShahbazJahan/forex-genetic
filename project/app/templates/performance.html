@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<!-- <a href="/getdatabuysell">previous</a>
+<a href="/getdatatrainingresult">next</a> -->
+<h1>performance chart</h1>
+<div style="width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div id="performancePlot" style="width:70vw;height: 70vh;"></div>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit veniam nemo enim?</p>
+  </div>
+
+{% endblock body %}
+{% block previous %}/getdatabuysell{% endblock previous %}
+
+{% block next %}/getdatatrainingresult{% endblock next %}

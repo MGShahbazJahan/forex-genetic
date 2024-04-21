@@ -66,17 +66,17 @@
         <h1>Forex Prediction</h1>
     </div>
     <div style="width: fit-content; margin: auto; padding: auto; ">
-        <form action="getdata" method="post" style=" padding: 30px;text-align: center;width: 100%;">
+        <form action="getdatacurrencychart" method="post" style=" padding: 30px;text-align: center;width: 100%;">
             {% csrf_token %}
             <div class="box">
                 <label for="cex" style="margin:20px;">Select the Currency Exchange:</label>
                 <select name="cex" id="cex" style="margin:auto;">
+                    <option value="EURJPY=X">EURJPY</option>
                     <option value="USDINR=X">USDINR</option>
                     <option value="USDAUD=X">USDAUD</option>
                     <option value="USDNZD=X">USDNZD</option>
                     <option value="USDCAD=X">USDCAD</option>
                     <option value="USDJPY=X">USDJPY</option>
-                    <option value="EURJPY=X">EURJPY</option>
                     <option value="EURGBP=X">EURGBP</option>
                     <option value="EURNZD=X">EURNZD</option>
                     <option value="INRJPY=X">INRJPY</option>

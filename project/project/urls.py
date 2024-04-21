@@ -21,5 +21,9 @@ from app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home,name='home'),
-    path('getdata',views.getdata,name='getdata'),
+    # path('getdata',views.getdata,name='getdata'),
+    path('getdatabuysell',views.getdatabuysell,name='getdatabuysell'),
+    path('getdatacurrencychart',views.getdatacurrencychart,name='getdatacurrencychart'),
+    path('getdatatrainingresult',views.getdatatrainingresult,name='getdatatrainingresult'),
+    path('getdataperformance',views.getdataperformance,name='getdataperformance'),
 ]
